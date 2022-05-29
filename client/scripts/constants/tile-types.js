@@ -7,4 +7,5 @@ export default {
   HOLE: 5,
   SPIKE: 6,
   SPIKE_PHASED: 7,
+  GEM: 8,
 }

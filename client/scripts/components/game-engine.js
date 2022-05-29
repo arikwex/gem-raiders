@@ -1,4 +1,5 @@
 import bus from '../bus.js';
+import LEVEL_DATA from '../constants/level-data.js';
 
 const GameEngine = () => {
   const state = {
@@ -9,7 +10,13 @@ const GameEngine = () => {
   };
 
   const loadLevel = (level) => {
-    // populate tiles from level map
+    const data = LEVEL_DATA[level];
+    state.tiles = data;
+  };
+
+  return {
+    state,
+    loadLevel,
   };
 };
 

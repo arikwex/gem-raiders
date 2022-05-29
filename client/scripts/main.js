@@ -4,5 +4,5 @@ import AudioManager from './managers/audio-manager.js';
 
 (() => {
   AudioManager.initialize();
-  transition(SCENES.MAIN_MENU);
+  transition(SCENES.GAME);
 })();
