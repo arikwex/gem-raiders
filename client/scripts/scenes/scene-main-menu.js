@@ -1,14 +1,22 @@
 import bus from '../bus.js';
+import ui from '../ui/ui-main-menu.js';
 
-export default (() => {
-  function initialize() {
-  }
+let requestAnimate = null;
 
-  function cleanup() {
-  }
+function initialize() {
+  animate();
+}
 
-  return {
-    initialize,
-    cleanup,
-  };
-})();
+function cleanup() {
+  window.cancelAnimationFrame(requestAnimate);
+}
+
+function animate() {
+  ui.render();
+  requestAnimate = window.requestAnimationFrame(animate);
+}
+
+export default {
+  initialize,
+  cleanup,
+};
