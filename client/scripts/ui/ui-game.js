@@ -8,8 +8,6 @@ function render(gameEngine) {
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
 
-  ctx.textBaseline = 'middle';
-
   // Reset/Undo instructions
   ctx.fillStyle = '#47f';
   ctx.font = '2em Jaldi';
@@ -59,6 +57,17 @@ function render(gameEngine) {
 
   // End game view
   ctx.restore();
+
+  // Level passed
+  if (gameEngine.state.levelPassed) {
+    ctx.fillStyle = '#333';
+    ctx.fillRect(0, canvas.height * 0.38, canvas.width, canvas.height * 0.19);
+    ctx.fillStyle = '#5af';
+    ctx.fillRect(0, canvas.height * 0.4, canvas.width, canvas.height * 0.15);
+    ctx.fillStyle = '#eef';
+    ctx.font = `${6 + Math.sin(Date.now() * 0.01) * 0.4}em Jaldi`;
+    ctx.fillText('LEVEL PASSED', canvas.width / 2, canvas.height * 0.49);
+  }
 };
 
 function renderTile(tileType, c, r, COL, ROW, tileSize) {

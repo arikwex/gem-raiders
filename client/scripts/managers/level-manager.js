@@ -1,3 +1,5 @@
+import LEVEL_DATA from '../constants/level-data.js';
+
 function LevelManager() {
   let level = 1;
 
@@ -13,10 +15,15 @@ function LevelManager() {
     level += 1;
   }
 
+  function hasLevelData() {
+    return LEVEL_DATA[level];
+  }
+
   return {
     reset,
     getLevel,
     nextLevel,
+    hasLevelData,
   }
 }
 

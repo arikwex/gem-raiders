@@ -8,6 +8,7 @@ const GameEngine = () => {
     characters: [],
     characterIndex: 0,
     tick: 0,
+    levelPassed: false,
   };
 
   const history = [];
@@ -23,15 +24,14 @@ const GameEngine = () => {
   }
 
   const undo = () => {
-    if (history.length == 0) {
-      return;
-    }
+    if (history.length == 0) { return; }
     const historyString = history.pop();
     const historyJson = JSON.parse(historyString);
     state.tiles = historyJson.tiles;
     state.characters = historyJson.characters;
     state.characterIndex = historyJson.characterIndex;
     state.tick = historyJson.tick;
+    state.levelPassed = history.levelPassed;
   }
 
   const loadLevel = (level) => {
@@ -45,6 +45,7 @@ const GameEngine = () => {
       [parseInt(data[0].length / 2 + 1), data.length, false],
     ];
     state.characterIndex = 0;
+    state.levelPassed = false;
   };
 
   const move = (position) => {
@@ -95,7 +96,8 @@ const GameEngine = () => {
         state.characters[state.characterIndex][0] = 2;
         state.characters[state.characterIndex][1] = -1;
         state.characters[state.characterIndex][2] = false;
-        console.log('SUCCESS!');
+        state.levelPassed = true;
+        bus.emit('level-complete');
       }
     }
   };

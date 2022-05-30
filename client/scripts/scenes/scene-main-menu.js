@@ -1,9 +1,11 @@
 import bus from '../bus.js';
 import ui from '../ui/ui-main-menu.js';
+import levelManager from '../managers/level-manager.js';
 
 let requestAnimate = null;
 
 function initialize() {
+  levelManager.reset();
   animate();
 }
 
