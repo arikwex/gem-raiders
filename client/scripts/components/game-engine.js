@@ -66,16 +66,13 @@ const GameEngine = () => {
       character[2] = true;
     }
 
-    // Stepping off a basic tile makes it a hole
+    // Stepping off a basic tile makes it a hole (or demotes durability)
     if (oldTile == TILE_TYPE.BASIC) {
       state.tiles[oldR][oldC] = TILE_TYPE.HOLE;
-    }
-
-    // Stepping on a double tile makes it a basic tile
-    if (tile == TILE_TYPE.DOUBLE) {
-      state.tiles[position[1]][position[0]] = TILE_TYPE.BASIC;
-    } else if (tile == TILE_TYPE.TRIPLE) {
-      state.tiles[position[1]][position[0]] = TILE_TYPE.DOUBLE;
+    } else if (oldTile == TILE_TYPE.DOUBLE) {
+      state.tiles[oldR][oldC] = TILE_TYPE.BASIC;
+    } else if (oldTile == TILE_TYPE.TRIPLE) {
+      state.tiles[oldR][oldC] = TILE_TYPE.DOUBLE;
     }
 
     // Reaching end of level area advances to next character
