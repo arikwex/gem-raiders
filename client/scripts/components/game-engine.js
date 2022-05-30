@@ -10,18 +10,45 @@ const GameEngine = () => {
     tick: 0,
   };
 
+  const history = [];
+
+  const clearHistory = () =>{
+    while (history.length > 0) {
+      history.pop();
+    }
+  }
+
+  const storeHistory = () => {
+    history.push(JSON.stringify(state));
+  }
+
+  const undo = () => {
+    if (history.length == 0) {
+      return;
+    }
+    const historyString = history.pop();
+    const historyJson = JSON.parse(historyString);
+    state.tiles = historyJson.tiles;
+    state.characters = historyJson.characters;
+    state.characterIndex = historyJson.characterIndex;
+    state.tick = historyJson.tick;
+  }
+
   const loadLevel = (level) => {
+    clearHistory();
     const data = LEVEL_DATA[level];
     state.tick = 0;
-    state.tiles = data;
+    state.tiles = JSON.parse(JSON.stringify(data));
     state.characters = [
       [parseInt(data[0].length / 2), data.length - 1, false],
       [parseInt(data[0].length / 2 - 1), data.length, false],
       [parseInt(data[0].length / 2 + 1), data.length, false],
     ];
+    state.characterIndex = 0;
   };
 
   const move = (position) => {
+    storeHistory();
     state.tick += 1;
     const character = state.characters[state.characterIndex];
     const oldC = character[0];
@@ -56,11 +83,13 @@ const GameEngine = () => {
         state.characters[state.characterIndex][0] = 0;
         state.characters[state.characterIndex][1] = -1;
         state.characters[state.characterIndex][2] = false;
+        state.characters[state.characterIndex + 1][1] -= 1;
         state.characterIndex += 1;
       } else if (state.characterIndex == 1) {
         state.characters[state.characterIndex][0] = 1;
         state.characters[state.characterIndex][1] = -1;
         state.characters[state.characterIndex][2] = false;
+        state.characters[state.characterIndex + 1][1] -= 1;
         state.characterIndex += 1;
       } else if (state.characterIndex == 2) {
         state.characters[state.characterIndex][0] = 2;
@@ -92,12 +121,19 @@ const GameEngine = () => {
     return true;
   };
 
+  const getCurrentCharacterInfo = () => {
+    const character = state.characters[state.characterIndex];
+    return [character[0], character[1], character[2]];
+  }
+
   return {
     state,
     loadLevel,
     move,
     getValidMoves,
     isValidMove,
+    getCurrentCharacterInfo,
+    undo,
   };
 };
 
