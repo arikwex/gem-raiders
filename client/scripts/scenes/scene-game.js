@@ -10,6 +10,12 @@ function initialize() {
   gameEngine = GameEngine();
   gameEngine.loadLevel(levelManager.getLevel());
   animate();
+
+  setInterval(() => {
+    const moves = gameEngine.getValidMoves();
+    console.log(moves);
+    gameEngine.move(moves[parseInt(Math.random() * moves.length)]);
+  }, 100);
 }
 
 function cleanup() {
