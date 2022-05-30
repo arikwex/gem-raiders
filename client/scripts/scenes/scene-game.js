@@ -73,12 +73,14 @@ function onControlUndo() {
 }
 
 function onLevelComplete() {
-  levelManager.nextLevel();
-  if (levelManager.hasLevelData()) {
-    transition(SCENES.GAME);
-  } else {
-    transition(SCENES.MAIN_MENU);
-  }
+  setTimeout(() => {
+    levelManager.nextLevel();
+    if (levelManager.hasLevelData()) {
+      transition(SCENES.GAME);
+    } else {
+      transition(SCENES.MAIN_MENU);
+    }
+  }, 2000);
 }
 
 export default {
