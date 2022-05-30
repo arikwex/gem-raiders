@@ -114,11 +114,12 @@ function renderTile(tileType, c, r, COL, ROW, tileSize) {
   }
   if (tileType == TILE_TYPE.HOLE) {
     ctx.fillStyle = '#222';
-    ctx.fillRect(0, 0, tileSize, tileSize);
+    ctx.fillRect(-0.1, -0.1, tileSize+0.2, tileSize+0.2);
   }
 };
 
-function renderCharacter(data, model) {
+function renderCharacter(character, model) {
+  // Body
   ctx.fillStyle = '#58f';
   if (model == 1) {
     ctx.fillRect(4, 4, 2, 4);
@@ -128,6 +129,7 @@ function renderCharacter(data, model) {
     ctx.fillRect(2.5, 3.5, 5, 4.5);
   }
 
+  // Cool hat
   ctx.fillStyle = '#222';
   if (model == 1) {
     ctx.fillRect(3.5, 4.1, 3, -0.7);
@@ -142,6 +144,22 @@ function renderCharacter(data, model) {
     ctx.fillRect(4.5, 3.54, 1, -1.2);
     ctx.fillRect(3.5, 3.54, 0.6, -1.5);
     ctx.fillRect(6.5, 3.54, -0.6, -1.5);
+  }
+
+  // Holding gem
+  if (character[2]) {
+    ctx.fillStyle = '#f47';
+    ctx.beginPath();
+    const dY = -5.5 - Math.abs(Math.sin(Date.now() * 0.01));
+    ctx.moveTo(5, 3+dY);
+    ctx.lineTo(7, 4+dY);
+    ctx.lineTo(5, 7+dY);
+    ctx.lineTo(3, 4+dY);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#c35';
+    ctx.lineWidth = 0.8;
+    ctx.stroke();
   }
 }
 

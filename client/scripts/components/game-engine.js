@@ -22,6 +22,7 @@ const GameEngine = () => {
   };
 
   const move = (position) => {
+    state.tick += 1;
     const character = state.characters[state.characterIndex];
     const oldC = character[0];
     const oldR = character[1];
@@ -48,6 +49,26 @@ const GameEngine = () => {
     } else if (tile == TILE_TYPE.TRIPLE) {
       state.tiles[position[1]][position[0]] = TILE_TYPE.DOUBLE;
     }
+
+    // Reaching end of level area advances to next character
+    if (position[1] == 0) {
+      if (state.characterIndex == 0) {
+        state.characters[state.characterIndex][0] = 0;
+        state.characters[state.characterIndex][1] = -1;
+        state.characters[state.characterIndex][2] = false;
+        state.characterIndex += 1;
+      } else if (state.characterIndex == 1) {
+        state.characters[state.characterIndex][0] = 1;
+        state.characters[state.characterIndex][1] = -1;
+        state.characters[state.characterIndex][2] = false;
+        state.characterIndex += 1;
+      } else if (state.characterIndex == 2) {
+        state.characters[state.characterIndex][0] = 2;
+        state.characters[state.characterIndex][1] = -1;
+        state.characters[state.characterIndex][2] = false;
+        console.log('SUCCESS!');
+      }
+    }
   };
 
   const getValidMoves = () => {
@@ -67,6 +88,7 @@ const GameEngine = () => {
     if (r < 0 || r >= state.tiles.length) { return false; }
     const tile = state.tiles[r][c];
     if (tile == TILE_TYPE.HOLE) { return false; }
+    if (tile == TILE_TYPE.EXIT && character[2] == false) { return false; }
     return true;
   };
 
