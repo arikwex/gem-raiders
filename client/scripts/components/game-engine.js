@@ -116,6 +116,7 @@ const GameEngine = () => {
     if (r < 0 || r >= state.tiles.length) { return false; }
     const tile = state.tiles[r][c];
     if (tile == TILE_TYPE.HOLE) { return false; }
+    if (tile == TILE_TYPE.SPIKE && (state.tick + 1) % 2 == 1) { return false; }
     if (tile == TILE_TYPE.EXIT && character[2] == false) { return false; }
     return true;
   };

@@ -41,7 +41,7 @@ function render(gameEngine) {
       const tileType = gameEngine.state.tiles[r][c];
       ctx.save();
       ctx.translate((c - COL / 2) * tileSize, (r - ROW / 2) * tileSize);
-      renderTile(tileType, c, r, COL, ROW, tileSize);
+      renderTile(tileType, c, r, COL, ROW, tileSize, gameEngine);
       ctx.restore();
     }
   }
@@ -70,7 +70,7 @@ function render(gameEngine) {
   }
 };
 
-function renderTile(tileType, c, r, COL, ROW, tileSize) {
+function renderTile(tileType, c, r, COL, ROW, tileSize, gameEngine) {
   if (tileType == TILE_TYPE.ENTRY || tileType == TILE_TYPE.EXIT) {
     ctx.fillStyle = '#ddd';
     ctx.fillRect(1, 1, tileSize - 2, tileSize - 2);
@@ -80,7 +80,7 @@ function renderTile(tileType, c, r, COL, ROW, tileSize) {
     ctx.strokeRect(1, 1, tileSize - 2, tileSize - 2);
     ctx.setLineDash([]);
   }
-  if (tileType == TILE_TYPE.BASIC || tileType == TILE_TYPE.DOUBLE || tileType == TILE_TYPE.TRIPLE || tileType == TILE_TYPE.GEM) {
+  if (tileType == TILE_TYPE.BASIC || tileType == TILE_TYPE.DOUBLE || tileType == TILE_TYPE.TRIPLE || tileType == TILE_TYPE.GEM || tileType == TILE_TYPE.SPIKE || tileType == TILE_TYPE.SPIKE_PHASED) {
     ctx.fillStyle = '#ccd';
     ctx.fillRect(0, 0, tileSize, tileSize);
     ctx.beginPath();
@@ -133,6 +133,44 @@ function renderTile(tileType, c, r, COL, ROW, tileSize) {
   if (tileType == TILE_TYPE.HOLE) {
     ctx.fillStyle = '#222';
     ctx.fillRect(-0.1, -0.1, tileSize+0.2, tileSize+0.2);
+  }
+  if (tileType == TILE_TYPE.SPIKE) {
+    ctx.lineWidth = 0.5;
+    if (gameEngine.state.tick % 2 == 1) {
+      ctx.strokeStyle = '#333';
+      ctx.beginPath();
+      ctx.moveTo(2, 3-4);
+      ctx.lineTo(3, 2-4);
+      ctx.lineTo(4, 3-4);
+      ctx.moveTo(3, 2-4);
+      ctx.lineTo(3, 2);
+
+      ctx.moveTo(6, 5-4);
+      ctx.lineTo(7, 4-4);
+      ctx.lineTo(8, 5-4);
+      ctx.moveTo(7, 4-4);
+      ctx.lineTo(7, 4);
+
+      ctx.moveTo(4, 8-4);
+      ctx.lineTo(5, 7-4);
+      ctx.lineTo(6, 8-4);
+      ctx.moveTo(5, 7-4);
+      ctx.lineTo(5, 7);
+      ctx.stroke();
+    } else {
+      ctx.strokeStyle = '#999';
+      ctx.beginPath();
+      ctx.moveTo(2, 3);
+      ctx.lineTo(3, 2);
+      ctx.lineTo(4, 3);
+      ctx.moveTo(6, 5);
+      ctx.lineTo(7, 4);
+      ctx.lineTo(8, 5);
+      ctx.moveTo(4, 8);
+      ctx.lineTo(5, 7);
+      ctx.lineTo(6, 8);
+      ctx.stroke();
+    }
   }
 };
 
