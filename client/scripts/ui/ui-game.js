@@ -8,20 +8,29 @@ function render(gameEngine) {
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
 
+  ctx.textBaseline = 'middle';
+
+  // Reset/Undo instructions
+  ctx.fillStyle = '#47f';
+  ctx.font = '2em Jaldi';
+  ctx.textAlign = 'left';
+  ctx.fillText('[R] Retry', canvas.width * 0.1, canvas.height * 0.95);
+  ctx.textAlign = 'right';
+  ctx.fillText('[U] Undo', canvas.width * 0.9, canvas.height * 0.95);
+
   // Level counter
+  ctx.fillStyle = '#f47';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillStyle = '#f47';
-  ctx.font = '2em Jaldi';
-  ctx.fillText(`LEVEL ${levelManager.getLevel()}`, canvas.width / 2, canvas.height * 0.07);
   ctx.font = '4em Jaldi';
+  ctx.fillText(`LEVEL ${levelManager.getLevel()}`, canvas.width / 2, canvas.height * 0.05);
 
   // Start game view
   const COL = gameEngine.state.tiles[0].length;
   const ROW = gameEngine.state.tiles.length;
   const tileSize = 10;
   const sceneScale = Math.min(
-    window.innerHeight * 0.65 / (tileSize * ROW),
+    window.innerHeight * 0.6 / (tileSize * ROW),
     window.innerWidth * 0.8 / (tileSize * COL),
   );
   ctx.save();
