@@ -21,7 +21,7 @@ function render(gameEngine) {
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.font = '4em Jaldi';
-  ctx.fillText(`LEVEL ${levelManager.getLevel()}`, canvas.width / 2, canvas.height * 0.05);
+  ctx.fillText(`LEVEL ${levelManager.getLevel()}`, canvas.width / 2, canvas.height * 0.07);
 
   // Start game view
   const COL = gameEngine.state.tiles[0].length;

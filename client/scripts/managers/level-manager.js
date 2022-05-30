@@ -1,7 +1,7 @@
 import LEVEL_DATA from '../constants/level-data.js';
 
 function LevelManager() {
-  let level = 5;
+  let level = 1;
 
   function reset() {
     level = 1;

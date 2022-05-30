@@ -10,6 +10,7 @@ function ControllerManager() {
       if (evt.key == 'ArrowRight') { bus.emit('control:right'); }
       if (evt.key == 'r') { bus.emit('control:reset'); }
       if (evt.key == 'u') { bus.emit('control:undo'); }
+      bus.emit('any-key');
     };
   };
 
