@@ -16,7 +16,7 @@ function render(gameEngine) {
   ctx.fillText(`LEVEL ${levelManager.getLevel()}`, canvas.width / 2, canvas.height * 0.07);
   ctx.font = '4em Jaldi';
 
-  // Render tile state
+  // Start game view
   const COL = gameEngine.state.tiles[0].length;
   const ROW = gameEngine.state.tiles.length;
   const tileSize = 10;
@@ -24,12 +24,11 @@ function render(gameEngine) {
     window.innerHeight * 0.65 / (tileSize * ROW),
     window.innerWidth * 0.8 / (tileSize * COL),
   );
-  console.log(sceneScale);
   ctx.save();
   ctx.translate(window.innerWidth / 2, window.innerHeight * 0.53);
   ctx.scale(sceneScale, sceneScale);
 
-
+  // Render tile state
   for (let r = 0; r < ROW; r++) {
     for (let c = 0; c < COL; c++) {
       const tileType = gameEngine.state.tiles[r][c];
@@ -40,6 +39,16 @@ function render(gameEngine) {
     }
   }
 
+  // Render players
+  for (let i = 0; i < gameEngine.state.characters.length; i++) {
+    const character = gameEngine.state.characters[i];
+    ctx.save();
+    ctx.translate((character[0] - COL / 2) * tileSize, (character[1] - ROW / 2) * tileSize);
+    renderCharacter(character, i);
+    ctx.restore();
+  }
+
+  // End game view
   ctx.restore();
 };
 
@@ -76,7 +85,7 @@ function renderTile(tileType, c, r, COL, ROW, tileSize) {
     ctx.beginPath();
     ctx.moveTo(2, 7);
     ctx.lineTo(8, 3);
-    ctx.strokeStyle = '#58f';
+    ctx.strokeStyle = '#aaa';
     ctx.lineWidth = 0.7;
     ctx.stroke();
   }
@@ -86,7 +95,7 @@ function renderTile(tileType, c, r, COL, ROW, tileSize) {
     ctx.lineTo(8, 4);
     ctx.moveTo(2, 6);
     ctx.lineTo(8, 2);
-    ctx.strokeStyle = '#4c4';
+    ctx.strokeStyle = '#aaa';
     ctx.lineWidth = 0.7;
     ctx.stroke();
   }
@@ -107,11 +116,34 @@ function renderTile(tileType, c, r, COL, ROW, tileSize) {
     ctx.fillStyle = '#222';
     ctx.fillRect(0, 0, tileSize, tileSize);
   }
-  // {
-  //   ctx.fillStyle = '#f0f';
-  //   ctx.fillRect((c - COL / 2) * tileSize, (r - ROW / 2) * tileSize, tileSize, tileSize);
-  // }
 };
+
+function renderCharacter(data, model) {
+  ctx.fillStyle = '#58f';
+  if (model == 1) {
+    ctx.fillRect(4, 4, 2, 4);
+  } else if (model == 0) {
+    ctx.fillRect(3.5, 5, 3, 3);
+  } else {
+    ctx.fillRect(2.5, 3.5, 5, 4.5);
+  }
+
+  ctx.fillStyle = '#222';
+  if (model == 1) {
+    ctx.fillRect(3.5, 4.1, 3, -0.7);
+    ctx.fillRect(4.5, 4.1, 1, -2.0);
+  } else if (model == 0) {
+    ctx.fillRect(2.5, 5.1, 5, -0.5);
+    ctx.fillRect(4.0, 5.1, 2, -1.5);
+    ctx.fillRect(2.5, 5.1, 0.8, -1.0);
+    ctx.fillRect(7.5, 5.1, -0.8, -1.0);
+  } else {
+    ctx.fillRect(3.5, 3.54, 3, -0.5);
+    ctx.fillRect(4.5, 3.54, 1, -1.2);
+    ctx.fillRect(3.5, 3.54, 0.6, -1.5);
+    ctx.fillRect(6.5, 3.54, -0.6, -1.5);
+  }
+}
 
 export default {
   render,
