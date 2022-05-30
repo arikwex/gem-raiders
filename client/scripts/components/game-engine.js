@@ -50,6 +50,7 @@ const GameEngine = () => {
 
   const move = (position) => {
     storeHistory();
+    bus.emit('character-move');
     state.tick += 1;
     const character = state.characters[state.characterIndex];
     const oldC = character[0];
@@ -64,6 +65,7 @@ const GameEngine = () => {
     if (character[2] == false && tile == TILE_TYPE.GEM) {
       state.tiles[position[1]][position[0]] = TILE_TYPE.BASIC;
       character[2] = true;
+      bus.emit('gem-collect');
     }
 
     // Stepping off a basic tile makes it a hole (or demotes durability)

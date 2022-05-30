@@ -5,7 +5,9 @@ function AudioManager() {
   let sampleRate = null;
 
   // Sounds to be loaded on loadSounds (cursed AudioContext waiting for interaction)
-  let beepSound;
+  let moveSound;
+  let gemSound;
+  let passSound;
 
   // Useful tone generators
   var sin = (i) => Math.min(Math.max(Math.sin(i), -1), 1)
@@ -45,8 +47,19 @@ function AudioManager() {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     sampleRate = audioCtx.sampleRate;
 
-    beepSound = await generate(0.25, (i) => {
-      return sin(i / 20);
+    moveSound = await generate(0.15, (i) => {
+      return saw(i / 40) * 0.1;
+    }, true);
+
+    gemSound = await generate(0.4, (i) => {
+      return sqr(i / 30) * 0.1 * win(i, 0, 0.2) + sqr(i / 15) * 0.1 * win(i, 0.2, 0.4);
+    }, true);
+
+    passSound = await generate(1.0, (i) => {
+      return saw(i / 30) * 0.5 * win(i, 0, 0.2) +
+        sin(i / 20) * 0.5 * win(i, 0.2, 0.4) +
+        sin(i / 15) * 0.5 * win(i, 0.4, 0.6) +
+        sin(i / 10) * 0.5 * win(i, 0.6, 0.8);
     }, true);
   }
 
@@ -62,12 +75,16 @@ function AudioManager() {
 
   this.loadOnContextGain = async () => {
     window.removeEventListener('mousedown', this.loadOnContextGain);
+    window.removeEventListener('keydown', this.loadOnContextGain);
     await this.loadSounds();
   };
 
   this.initialize = () => {
     window.addEventListener('mousedown', this.loadOnContextGain);
-    bus.on('beep', () => { play(beepSound); });
+    window.addEventListener('keydown', this.loadOnContextGain);
+    bus.on('character-move', () => { play(moveSound); });
+    bus.on('gem-collect', () => { play(gemSound); });
+    bus.on('level-complete', () => { play(passSound); });
   };
 }
 
