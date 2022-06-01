@@ -133,10 +133,10 @@ const GameEngine = () => {
     const x = character[0];
     const y = character[1];
     const moves = [];
+    if (isValidMove(character, x, y+1)) { moves.push([x, y+1]); }
     if (isValidMove(character, x-1, y)) { moves.push([x-1, y]); }
     if (isValidMove(character, x+1, y)) { moves.push([x+1, y]); }
     if (isValidMove(character, x, y-1)) { moves.push([x, y-1]); }
-    if (isValidMove(character, x, y+1)) { moves.push([x, y+1]); }
     return moves;
   };
 

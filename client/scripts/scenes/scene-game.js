@@ -22,8 +22,12 @@ function initialize() {
   bus.on('control:undo', onControlUndo);
   bus.on('level-complete', onLevelComplete);
 
-  const moves = solver(gameEngine);
-  autoplay(gameEngine, moves);
+  setTimeout(() => {
+    bus.off('level-complete', onLevelComplete);
+    const moves = solver(gameEngine);
+    autoplay(gameEngine, moves);
+    bus.on('level-complete', () => gameEngine.state.levelPassed = false);
+  }, 200);
 }
 
 function cleanup() {

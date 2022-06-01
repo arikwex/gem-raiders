@@ -17,7 +17,8 @@ function levelGenerator(rows, cols) {
       let r = parseInt(Math.random() * rows);
       let c = parseInt(Math.random() * cols);
       const opts = [
-        TILE_TYPE.DOUBLE, TILE_TYPE.TRIPLE, TILE_TYPE.HOLE,
+        TILE_TYPE.DOUBLE, TILE_TYPE.TRIPLE,
+        TILE_TYPE.HOLE, TILE_TYPE.HOLE,
         TILE_TYPE.SPIKE_UP, TILE_TYPE.SPIKE_DOWN,
       ];
       const tileType = opts[parseInt(Math.random() * opts.length)];
