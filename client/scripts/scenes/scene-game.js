@@ -27,6 +27,7 @@ function initialize() {
     const moves = solver(gameEngine);
     autoplay(gameEngine, moves);
     bus.on('level-complete', () => gameEngine.state.levelPassed = false);
+    bus.on('replay', () => { autoplay(gameEngine, moves, 200); });
   }, 200);
 }
 
