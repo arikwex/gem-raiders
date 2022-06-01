@@ -1,3 +1,5 @@
+import TILE_TYPE from '../constants/tile-types.js';
+
 function Node(moves, serializedState) {
   this.moves = JSON.parse(JSON.stringify(moves));
   this.state = JSON.parse(serializedState);
@@ -37,7 +39,8 @@ function solver(gameEngine) {
   // Begin DFS
   let attempts = 0;
   let currentNode = null;
-  while (open.length > 0 && attempts < 10000000) {
+  while (open.length > 0 && attempts < 1000000) {
+    // Examine the current pathing option
     const node = open.pop();
     currentNode = node;
     gameEngine.restoreState(node.state);
@@ -48,6 +51,12 @@ function solver(gameEngine) {
       break;
     }
 
+    // Unbeatable state checker here to cull dead ends
+    if (unbeatableState(gameEngine.state)) {
+      continue;
+    }
+
+    // Add all adjacent valid moves as possible paths
     const newMoves = gameEngine.getValidMoves();
     newMoves.map((m) => {
       gameEngine.move(m);
@@ -69,6 +78,27 @@ function solver(gameEngine) {
   gameEngine.restoreState(JSON.parse(initialState));
   gameEngine.setSilent(false);
   return currentNode.moves;
+}
+
+function unbeatableState(state) {
+  // Check if players are beneath an uncrossable horizontal chasm
+  const lowestPlayerRow = Math.max(
+    state.characters[0][1], state.characters[1][1], state.characters[2][1],
+  );
+  for (let r = 1; r < lowestPlayerRow; r++) {
+    let allHoles = true;
+    for (let c = 0; c < state.tiles[0].length; c++) {
+      if (state.tiles[r][c] != TILE_TYPE.HOLE) {
+        allHoles = false;
+        break;
+      }
+    }
+    if (allHoles) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 export default solver;
