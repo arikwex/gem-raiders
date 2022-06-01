@@ -61,9 +61,10 @@ function solver(gameEngine) {
     });
 
     attempts += 1;
-    console.log(attempts);
+    if (attempts % 10000 == 0) {
+      console.log(`Thinking... ${attempts} moves tried!`);
+    }
   }
-  console.log(currentNode.moves);
 
   gameEngine.restoreState(JSON.parse(initialState));
   gameEngine.setSilent(false);
