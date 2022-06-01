@@ -90,6 +90,18 @@ const GameEngine = () => {
       state.tiles[oldR][oldC] = TILE_TYPE.DOUBLE;
     }
 
+    // All spike tiles alternate phase
+    for (let r = 0; r < state.tiles.length; r++) {
+      for (let c = 0; c < state.tiles[0].length; c++) {
+        const tileType = state.tiles[r][c];
+        if (tileType == TILE_TYPE.SPIKE_DOWN) {
+          state.tiles[r][c] = TILE_TYPE.SPIKE_UP;
+        } else if (tileType == TILE_TYPE.SPIKE_UP) {
+          state.tiles[r][c] = TILE_TYPE.SPIKE_DOWN;
+        }
+      }
+    }
+
     // Reaching end of level area advances to next character
     if (position[1] == 0) {
       if (state.characterIndex == 0) {

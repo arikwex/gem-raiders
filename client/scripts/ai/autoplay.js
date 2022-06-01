@@ -1,4 +1,4 @@
-async function autoplay(gameEngine, moves, period = 200) {
+async function autoplay(gameEngine, moves, period = 100) {
   for (const m of moves) {
     await new Promise((res) => setTimeout(res, period));
     gameEngine.move(m);
