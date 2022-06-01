@@ -7,7 +7,7 @@ import levelGenerator from './ai/level-generator.js';
 import LEVEL_DATA from './constants/level-data.js';
 
 (() => {
-  LEVEL_DATA[1] = levelGenerator(5, 5);
+  LEVEL_DATA[1] = levelGenerator(6, 6);
   AudioManager.initialize();
   ControllerManager.initialize();
   transition(SCENES.GAME);

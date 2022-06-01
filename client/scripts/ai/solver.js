@@ -86,14 +86,20 @@ function unbeatableState(state) {
     state.characters[0][1], state.characters[1][1], state.characters[2][1],
   );
   for (let r = 1; r < lowestPlayerRow; r++) {
-    let allHoles = true;
+    let holeParity = 0;
+    let numPlayersBelow = 0;
+    if (state.characters[0][1] > r) { numPlayersBelow += 1; }
+    if (state.characters[1][1] > r) { numPlayersBelow += 1; }
+    if (state.characters[2][1] > r) { numPlayersBelow += 1; }
     for (let c = 0; c < state.tiles[0].length; c++) {
-      if (state.tiles[r][c] != TILE_TYPE.HOLE) {
-        allHoles = false;
-        break;
-      }
+      const tileType = state.tiles[r][c];
+      if (tileType == TILE_TYPE.BASIC) { holeParity += 1; }
+      else if (tileType == TILE_TYPE.DOUBLE) { holeParity += 2; }
+      else if (tileType == TILE_TYPE.TRIPLE) { holeParity += 3; }
+      else if (tileType == TILE_TYPE.GEM) { holeParity += 1; }
+      else { holeParity += 3; }
     }
-    if (allHoles) {
+    if (holeParity < numPlayersBelow) {
       return true;
     }
   }
