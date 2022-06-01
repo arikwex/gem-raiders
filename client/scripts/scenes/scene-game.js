@@ -3,6 +3,8 @@ import ui from '../ui/ui-game.js';
 import GameEngine from '../components/game-engine.js';
 import levelManager from '../managers/level-manager.js';
 import { transition, SCENES } from '../scenes/scene-manager.js';
+import solver from '../ai/solver.js';
+import autoplay from '../ai/autoplay.js';
 
 let requestAnimate = null;
 let gameEngine = null;
@@ -19,6 +21,9 @@ function initialize() {
   bus.on('control:reset', onControlReset);
   bus.on('control:undo', onControlUndo);
   bus.on('level-complete', onLevelComplete);
+
+  const moves = solver(gameEngine);
+  autoplay(gameEngine, moves);
 }
 
 function cleanup() {

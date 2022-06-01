@@ -7,9 +7,9 @@ const GameEngine = () => {
     tiles: [[]],
     characters: [],
     characterIndex: 0,
-    tick: 0,
     levelPassed: false,
   };
+  let silent = false;
 
   const history = [];
 
@@ -27,17 +27,27 @@ const GameEngine = () => {
     if (history.length == 0) { return; }
     const historyString = history.pop();
     const historyJson = JSON.parse(historyString);
+    restoreState(historyJson);
+  }
+
+  const getSerializedState = () => {
+    return JSON.stringify(state);
+  }
+
+  const restoreState = (historyJson) => {
     state.tiles = historyJson.tiles;
     state.characters = historyJson.characters;
     state.characterIndex = historyJson.characterIndex;
-    state.tick = historyJson.tick;
-    state.levelPassed = history.levelPassed;
+    state.levelPassed = historyJson.levelPassed;
+  }
+
+  const setSilent = (s) => {
+    silent = s;
   }
 
   const loadLevel = (level) => {
     clearHistory();
     const data = LEVEL_DATA[level];
-    state.tick = 0;
     state.tiles = JSON.parse(JSON.stringify(data));
     state.characters = [
       [parseInt(data[0].length / 2), data.length - 1, false],
@@ -50,8 +60,9 @@ const GameEngine = () => {
 
   const move = (position) => {
     storeHistory();
-    bus.emit('character-move');
-    state.tick += 1;
+    if (!silent) {
+      bus.emit('character-move');
+    }
     const character = state.characters[state.characterIndex];
     const oldC = character[0];
     const oldR = character[1];
@@ -65,7 +76,9 @@ const GameEngine = () => {
     if (character[2] == false && tile == TILE_TYPE.GEM) {
       state.tiles[position[1]][position[0]] = TILE_TYPE.BASIC;
       character[2] = true;
-      bus.emit('gem-collect');
+      if (!silent) {
+        bus.emit('gem-collect');
+      }
     }
 
     // Stepping off a basic tile makes it a hole (or demotes durability)
@@ -96,7 +109,9 @@ const GameEngine = () => {
         state.characters[state.characterIndex][1] = -1;
         state.characters[state.characterIndex][2] = false;
         state.levelPassed = true;
-        bus.emit('level-complete');
+        if (!silent) {
+          bus.emit('level-complete');
+        }
       }
     }
   };
@@ -118,7 +133,7 @@ const GameEngine = () => {
     if (r < 0 || r >= state.tiles.length) { return false; }
     const tile = state.tiles[r][c];
     if (tile == TILE_TYPE.HOLE) { return false; }
-    if (tile == TILE_TYPE.SPIKE && (state.tick + 1) % 2 == 1) { return false; }
+    if (tile == TILE_TYPE.SPIKE_DOWN) { return false; }
     if (tile == TILE_TYPE.EXIT && character[2] == false) { return false; }
     return true;
   };
@@ -130,12 +145,15 @@ const GameEngine = () => {
 
   return {
     state,
+    getSerializedState,
+    restoreState,
     loadLevel,
     move,
     getValidMoves,
     isValidMove,
     getCurrentCharacterInfo,
     undo,
+    setSilent,
   };
 };
 

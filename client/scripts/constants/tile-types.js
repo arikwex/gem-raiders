@@ -5,7 +5,7 @@ export default {
   DOUBLE: 3,
   TRIPLE: 4,
   HOLE: 5,
-  SPIKE: 6,
-  SPIKE_PHASED: 7,
+  SPIKE_DOWN: 6,
+  SPIKE_UP: 7,
   GEM: 8,
 }
