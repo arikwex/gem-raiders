@@ -37,7 +37,7 @@ function solver(gameEngine) {
   // Begin DFS
   let attempts = 0;
   let currentNode = null;
-  while (open.length > 0 && attempts < 1000000) {
+  while (open.length > 0 && attempts < 10000000) {
     const node = open.pop();
     currentNode = node;
     gameEngine.restoreState(node.state);
